@@ -24,9 +24,7 @@ setuptools.setup(
     python_requires=">=3.9",
     install_requires=[
         "datasets",
-        "numpy",
         "pandas",
-        "tokenizers",
         "transformers",
     ],
 )
