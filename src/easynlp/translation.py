@@ -67,5 +67,5 @@ def get_translation(
         tgt_lang=output_language,
         clean_up_tokenization_spaces=True,
     )
-    predicted_class = output[0]["translation_text"]
-    return {output_column: predicted_class}
+    predicted_translation = output[0]["translation_text"]
+    return {output_column: predicted_translation}
