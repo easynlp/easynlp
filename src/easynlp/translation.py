@@ -48,6 +48,6 @@ def translation(
 
 
 def get_translation(example, input_column, pipe, output_column):
-    output = pipe(example[input_column])
+    output = pipe(example[input_column], clean_up_tokenization_spaces=True)
     predicted_class = output[0]["translation_text"]
     return {output_column: predicted_class}
