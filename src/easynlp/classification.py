@@ -27,7 +27,7 @@ def classification(
     columns_to_remove = [f for f in dataset.features if f != input_column]
     dataset = dataset.remove_columns(columns_to_remove)
 
-    model = transformers.AutoModel.from_pretrained(model_name)
+    model = transformers.AutoModelForSequenceClassification.from_pretrained(model_name)
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
 
     pipe = transformers.ZeroShotClassificationPipeline(model=model, tokenizer=tokenizer)
