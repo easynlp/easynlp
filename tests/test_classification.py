@@ -14,4 +14,4 @@ def test_classification():
     output_column = "classification"
     output_dataset = easynlp.classification(data, input_column, labels, output_column)
     assert len(output_dataset) == 3
-    assert output_dataset["classification"] == ["sport", "weather", "business"]
+    assert output_dataset[output_column] == labels

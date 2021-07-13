@@ -16,9 +16,10 @@ def test_translation():
     output_dataset = easynlp.translation(
         data, input_column, input_language, output_language, output_column
     )
-    assert len(output_dataset) == 3
-    assert output_dataset["translation"] == [
+    translated_text = [
         "Ich liebe Fußball zu spielen.",
         "Heute ist es wirklich sonnig.",
         "Der Aktienmarkt ist heute um 10 % gefallen.",
     ]
+    assert len(output_dataset) == 3
+    assert output_dataset[output_column] == translated_text
