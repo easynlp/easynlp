@@ -33,7 +33,7 @@ def convert_list_to_dataset(data: List[Dict]) -> datasets.Dataset:
     return dataset
 
 
-def convert_dict_to_dataset(data: Dict[List]) -> datasets.Dataset:
+def convert_dict_to_dataset(data: Dict[str, List]) -> datasets.Dataset:
     df = pd.DataFrame(data)
     dataset = convert_df_to_dataset(df)
     return dataset
