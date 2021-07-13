@@ -11,7 +11,7 @@ def test_classification():
     }
     input_column = "text"
     labels = ["sport", "weather", "business"]
-    output_column = "topic"
+    output_column = "classification"
     output_dataset = easynlp.classification(data, input_column, labels, output_column)
     assert len(output_dataset) == 3
-    assert output_dataset["topic"] == ["sport", "weather", "business"]
+    assert output_dataset["classification"] == ["sport", "weather", "business"]
