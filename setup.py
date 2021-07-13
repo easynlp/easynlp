@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.9",
+    python_requires=">=3.7",
     install_requires=[
         "datasets>=1.9.0",
         "pandas>=1.3.0",
