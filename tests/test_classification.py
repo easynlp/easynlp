@@ -9,9 +9,9 @@ def test_classification():
             "The stock market is down 10% today.",
         ]
     }
-    input_column = "text"
     labels = ["sport", "weather", "business"]
+    input_column = "text"
     output_column = "classification"
-    output_dataset = easynlp.classification(data, input_column, labels, output_column)
+    output_dataset = easynlp.classification(data, labels, input_column, output_column)
     assert len(output_dataset) == 3
     assert output_dataset[output_column] == labels

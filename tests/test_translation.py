@@ -9,12 +9,12 @@ def test_translation():
             "The stock market is down 10% today.",
         ]
     }
-    input_column = "text"
-    input_language = "en"
     output_language = "de"
+    input_language = "en"
+    input_column = "text"
     output_column = "translation"
     output_dataset = easynlp.translation(
-        data, input_column, input_language, output_language, output_column
+        data, output_language, input_language, input_column, output_column
     )
     translated_text = [
         "Ich spiele gern Fußball.",

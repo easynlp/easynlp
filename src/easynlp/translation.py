@@ -7,9 +7,9 @@ import datasets
 
 def translation(
     data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset],
-    input_column: str,
-    input_language: str,
     output_language: str,
+    input_language: str = "en",
+    input_column: str = "text",
     output_column: str = "translation",
     model_name: Optional[str] = None,
 ):

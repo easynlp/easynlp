@@ -7,8 +7,8 @@ import datasets
 
 def classification(
     data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset],
-    input_column: str,
     labels: List[str],
+    input_column: str = "text",
     output_column: str = "classification",
     model_name: str = "typeform/distilbert-base-uncased-mnli",
 ):
