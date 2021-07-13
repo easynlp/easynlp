@@ -1,14 +1,14 @@
 from easynlp.data import handle_data
 import transformers
-from typing import Union
+from typing import Dict, List, Union
 import pandas as pd
 import datasets
 
 
 def classification(
-    data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
+    data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset],
     input_column: str,
-    labels: list[str],
+    labels: List[str],
     output_column: str = "classification",
     model_name: str = "typeform/distilbert-base-uncased-mnli",
 ):

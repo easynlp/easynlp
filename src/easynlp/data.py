@@ -1,10 +1,10 @@
 import datasets
 import pandas as pd
-from typing import Union
+from typing import Dict, List, Union
 
 
 def handle_data(
-    data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset]
+    data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset]
 ) -> datasets.Dataset:
 
     assert (
@@ -27,13 +27,13 @@ def handle_data(
     return dataset
 
 
-def convert_list_to_dataset(data: list[dict]) -> datasets.Dataset:
+def convert_list_to_dataset(data: List[Dict]) -> datasets.Dataset:
     df = pd.DataFrame(data)
     dataset = convert_df_to_dataset(df)
     return dataset
 
 
-def convert_dict_to_dataset(data: dict[list]) -> datasets.Dataset:
+def convert_dict_to_dataset(data: Dict[List]) -> datasets.Dataset:
     df = pd.DataFrame(data)
     dataset = convert_df_to_dataset(df)
     return dataset

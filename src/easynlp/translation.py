@@ -1,12 +1,12 @@
 from easynlp.data import handle_data
 import transformers
-from typing import Optional, Union
+from typing import Dict, List, Optional, Union
 import pandas as pd
 import datasets
 
 
 def translation(
-    data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
+    data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset],
     input_column: str,
     input_language: str,
     output_language: str,
