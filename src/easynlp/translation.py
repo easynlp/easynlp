@@ -1,6 +1,6 @@
 from easynlp.data import handle_data
 import transformers
-from typing import Union
+from typing import Optional, Union
 import pandas as pd
 import datasets
 
@@ -11,8 +11,12 @@ def translation(
     input_language: str,
     output_language: str,
     output_column: str = "translation",
+    model_name: Optional[str] = None,
 ):
     """Does translation on data."""
+
+    if model_name is None:
+        model_name = f'Helsinki-NLP/opus-mt-{input_language}-{output_language}'
 
     assert (
         input_column != output_column
@@ -31,15 +35,18 @@ def translation(
     columns_to_remove = [f for f in dataset.features if f != input_column]
     dataset = dataset.remove_columns(columns_to_remove)
 
-    pipe = transformers.pipeline(
-        task=f"translation_{input_language}_to_{output_language}"
-    )
+    model = transformers.AutoModelForSeq2SeqLM.from_pretrained(model_name)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+
+    pipe = transformers.TranslationPipeline(model=model, tokenizer=tokenizer, task=f'translation_{input_language}_to_{output_language}')
 
     dataset = dataset.map(
         get_translation,
         fn_kwargs={
-            "input_column": input_column,
             "pipe": pipe,
+            "input_column": input_column,
+            "input_language": input_language,
+            "output_language": output_language,
             "output_column": output_column,
         },
     )
@@ -47,7 +54,7 @@ def translation(
     return dataset
 
 
-def get_translation(example, input_column, pipe, output_column):
-    output = pipe(example[input_column], clean_up_tokenization_spaces=True)
+def get_translation(example, pipe, input_column, input_language, output_language, output_column):
+    output = pipe(example[input_column], src_lang=input_language, tgt_lang=output_language, clean_up_tokenization_spaces=True)
     predicted_class = output[0]["translation_text"]
     return {output_column: predicted_class}
