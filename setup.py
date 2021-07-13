@@ -23,8 +23,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.9",
     install_requires=[
-        "datasets",
-        "pandas",
-        "transformers",
+        "datasets>=1.9.0",
+        "pandas>=1.3.0",
+        "torch>=1.9.0",
+        "transformers>=4.8.2",
     ],
 )
