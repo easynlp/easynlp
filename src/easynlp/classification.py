@@ -29,13 +29,14 @@ def classification(
 
     model = transformers.AutoModel.from_pretrained(model_name)
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+
     pipe = transformers.ZeroShotClassificationPipeline(model=model, tokenizer=tokenizer)
 
     dataset = dataset.map(
         get_classification,
         fn_kwargs={
-            "input_column": input_column,
             "pipe": pipe,
+            "input_column": input_column,
             "labels": labels,
             "output_column": output_column,
         },
@@ -44,7 +45,7 @@ def classification(
     return dataset
 
 
-def get_classification(example, input_column, pipe, labels, output_column):
+def get_classification(example, pipe, input_column, labels, output_column):
     output = pipe(example[input_column], labels)
     predicted_class = output["labels"][0]
     return {output_column: predicted_class}
