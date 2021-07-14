@@ -8,7 +8,7 @@ import collections
 
 def ner(
     data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
-    input_column: str,
+    input_column: str = "text",
     output_column: str = "ner_tags",
     model_name: Optional[str] = "dslim/bert-base-NER",
 ):
