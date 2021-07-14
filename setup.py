@@ -24,8 +24,10 @@ setuptools.setup(
     python_requires=">=3.7",
     install_requires=[
         "datasets>=1.9.0",
+        "fastapi>=0.66",
         "pandas>=1.3.0",
         "torch>=1.9.0",
         "transformers>=4.8.2",
+        "uvicorn>=0.14",
     ],
 )
