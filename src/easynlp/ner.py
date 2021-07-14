@@ -39,18 +39,20 @@ def ner(
             "input_column": input_column,
             "output_column": output_column,
         },
+        batched=True,
+        batch_size=len(dataset) // 100,
     )
 
     return dataset
 
 
-def get_ner_tags(example, pipe, input_column, output_column):
-    output = pipe(
-        example[input_column],
+def get_ner_tags(examples, pipe, input_column, output_column):
+    outputs = pipe(
+        examples[input_column],
     )
-    predicted_tags = [o["entity_group"] for o in output]
-    predicted_tag_starts = [o["start"] for o in output]
-    predicted_tag_ends = [o["end"] for o in output]
+    predicted_tags = [[o["entity_group"] for o in output] for output in outputs]
+    predicted_tag_starts = [[o["start"] for o in output] for output in outputs]
+    predicted_tag_ends = [[o["end"] for o in output] for output in outputs]
     return {
         output_column: predicted_tags,
         f"{output_column}_starts": predicted_tag_starts,

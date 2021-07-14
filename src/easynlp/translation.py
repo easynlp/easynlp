@@ -53,19 +53,21 @@ def translation(
             "output_language": output_language,
             "output_column": output_column,
         },
+        batched=True,
+        batch_size=len(dataset) // 100,
     )
 
     return dataset
 
 
 def get_translation(
-    example, pipe, input_column, input_language, output_language, output_column
+    examples, pipe, input_column, input_language, output_language, output_column
 ):
-    output = pipe(
-        example[input_column],
+    outputs = pipe(
+        examples[input_column],
         src_lang=input_language,
         tgt_lang=output_language,
         clean_up_tokenization_spaces=True,
     )
-    predicted_translation = output[0]["translation_text"]
-    return {output_column: predicted_translation}
+    predicted_translations = [output["translation_text"] for output in outputs]
+    return {output_column: predicted_translations}
