@@ -49,5 +49,5 @@ def classification(
 
 def get_classification(examples, pipe, input_column, labels, output_column):
     outputs = pipe(examples[input_column], labels)
-    predicted_classes = [outputs["labels"][0] for output in outputs]
+    predicted_classes = [output["labels"][0] for output in outputs]
     return {output_column: predicted_classes}
