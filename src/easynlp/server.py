@@ -34,8 +34,8 @@ class NERRequest(pydantic.BaseModel):
 
 class NERResponse(pydantic.BaseModel):
     ner_tags: List[List[str]]
-    ner_tags_starts: List[List[int]]
-    ner_tags_ends: List[List[int]]
+    ner_start_offsets: List[List[int]]
+    ner_end_offsets: List[List[int]]
 
 
 @app.get("/")
@@ -82,11 +82,11 @@ def ner(request: NERRequest):
     model_name = request.model_name
     outputs = easynlp.ner(data=data, model_name=model_name)
     predicted_ner_tags = [output["ner_tags"] for output in outputs]
-    predicted_ner_tags_starts = [output["ner_tags_starts"] for output in outputs]
-    predicted_ner_tags_ends = [output["ner_tags_ends"] for output in outputs]
+    predicted_end_offsets = [output["ner_start_offsets"] for output in outputs]
+    predicted_start_offsets = [output["ner_end_offsets"] for output in outputs]
     response = NERResponse(
         ner_tags=predicted_ner_tags,
-        ner_tags_starts=predicted_ner_tags_starts,
-        ner_tags_ends=predicted_ner_tags_ends,
+        ner_start_offsets=predicted_start_offsets,
+        ner_end_offsets=predicted_end_offsets,
     )
     return response
