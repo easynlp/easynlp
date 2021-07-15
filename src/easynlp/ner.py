@@ -10,9 +10,12 @@ def ner(
     data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
     input_column: str = "text",
     output_column: str = "ner_tags",
-    model_name: Optional[str] = "dslim/bert-base-NER",
+    model_name: Optional[str] = None,
 ):
     """Does named entity recognition on data."""
+
+    if model_name is None:
+        model_name = "dslim/bert-base-NER"
 
     assert (
         input_column != output_column
@@ -50,6 +53,8 @@ def get_ner_tags(examples, pipe, input_column, output_column):
     outputs = pipe(
         examples[input_column],
     )
+    if isinstance(outputs[0], dict):  # handle case where input is a single example
+        outputs = [outputs]
     predicted_tags = [[o["entity_group"] for o in output] for output in outputs]
     predicted_tag_starts = [[o["start"] for o in output] for output in outputs]
     predicted_tag_ends = [[o["end"] for o in output] for output in outputs]
