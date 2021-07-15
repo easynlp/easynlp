@@ -17,6 +17,12 @@
 ## Installation
 
 ```bash
+pip install git+https://github.com/dpinney/eznlp
+```
+
+Alternatively, if you wish to edit `easynlp`:
+
+```bash
 git clone https://github.com/easynlp/easynlp.git
 cd easynlp
 pip install -e .
@@ -31,7 +37,7 @@ list_data = [{"text": "I love playing soccer."}, {"text":"It is really sunny tod
 dict_data = {"text": ["I love playing soccer.", "It is really sunny today."]}
 ```
 
-Note that even with a single example the data be in the same format:
+Note that even with a single example the data must be in the same format:
 
 ```python
 # INCORRECT
