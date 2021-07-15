@@ -3,13 +3,12 @@ import transformers
 from typing import Optional, Union
 import pandas as pd
 import datasets
-import collections
 
 
 def ner(
     data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
     input_column: str = "text",
-    output_column: str = "ner_tags",
+    output_column: str = "ner",
     model_name: Optional[str] = None,
 ):
     """Does named entity recognition on data."""
@@ -56,10 +55,10 @@ def get_ner_tags(examples, pipe, input_column, output_column):
     if isinstance(outputs[0], dict):  # handle case where input is a single example
         outputs = [outputs]
     predicted_tags = [[o["entity_group"] for o in output] for output in outputs]
-    predicted_tag_starts = [[o["start"] for o in output] for output in outputs]
-    predicted_tag_ends = [[o["end"] for o in output] for output in outputs]
+    predicted_start_offsets = [[o["start"] for o in output] for output in outputs]
+    predicted_end_offsets = [[o["end"] for o in output] for output in outputs]
     return {
-        output_column: predicted_tags,
-        f"{output_column}_starts": predicted_tag_starts,
-        f"{output_column}_ends": predicted_tag_ends,
+        f"{output_column}_tags": predicted_tags,
+        f"{output_column}_start_offsets": predicted_start_offsets,
+        f"{output_column}_end_offsets": predicted_end_offsets,
     }
