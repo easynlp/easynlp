@@ -27,6 +27,17 @@ class TranslationResponse(pydantic.BaseModel):
     translation: List[str]
 
 
+class NERRequest(pydantic.BaseModel):
+    text: List[str]
+    model_name: Optional[str] = None
+
+
+class NERResponse(pydantic.BaseModel):
+    ner_tags: List[List[str]]
+    ner_tags_starts: List[List[int]]
+    ner_tags_ends: List[List[int]]
+
+
 @app.get("/")
 def root():
     return {"message": "hello world!"}
@@ -62,4 +73,20 @@ def translation(request: TranslationRequest):
     )
     predicted_translations = [output["translation"] for output in outputs]
     response = TranslationResponse(translation=predicted_translations)
+    return response
+
+
+@app.post("/ner", response_model=NERResponse)
+def ner(request: NERRequest):
+    data = {"text": request.text}
+    model_name = request.model_name
+    outputs = easynlp.ner(data=data, model_name=model_name)
+    predicted_ner_tags = [output["ner_tags"] for output in outputs]
+    predicted_ner_tags_starts = [output["ner_tags_starts"] for output in outputs]
+    predicted_ner_tags_ends = [output["ner_tags_ends"] for output in outputs]
+    response = NERResponse(
+        ner_tags=predicted_ner_tags,
+        ner_tags_starts=predicted_ner_tags_starts,
+        ner_tags_ends=predicted_ner_tags_ends,
+    )
     return response
