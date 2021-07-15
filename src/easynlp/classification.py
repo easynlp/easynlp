@@ -1,6 +1,6 @@
 from easynlp.data import handle_data
 import transformers
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 import pandas as pd
 import datasets
 
@@ -10,9 +10,12 @@ def classification(
     labels: List[str],
     input_column: str = "text",
     output_column: str = "classification",
-    model_name: str = "typeform/distilbert-base-uncased-mnli",
+    model_name: Optional[str] = None,
 ):
     """Does zero-shot classification on data."""
+
+    if model_name is None:
+        model_name = "typeform/distilbert-base-uncased-mnli"
 
     assert (
         input_column != output_column
