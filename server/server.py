@@ -9,10 +9,11 @@ app = fastapi.FastAPI()
 class ClassificationRequest(pydantic.BaseModel):
     text: List[str]
     labels: List[str]
+    model_name: str = "typeform/distilbert-base-uncased-mnli"
 
 
 class ClassificationResponse(pydantic.BaseModel):
-    predicted_label: List[str]
+    classification: List[str]
 
 
 @app.get("/")
@@ -29,7 +30,8 @@ def ping():
 def classification(request: ClassificationRequest):
     data = {"text": request.text}
     labels = request.labels
-    outputs = easynlp.classification(data, labels)
-    predicted_label = [output["classification"] for output in outputs]
-    response = ClassificationResponse(predicted_label=predicted_label)
+    model_name = request.model_name
+    outputs = easynlp.classification(data=data, labels=labels, model_name=model_name)
+    predicted_labels = [output["classification"] for output in outputs]
+    response = ClassificationResponse(classification=predicted_labels)
     return response
