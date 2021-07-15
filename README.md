@@ -102,7 +102,7 @@ assert output_dataset["translation"] == translated_text
 
 ### Named Entity Recognition (NER)
 
-`easynlp.ner` recognizes the following NER tags: `PER` (person), `ORG` (organization), `LOC` (location), and `MIS` (miscellaneous). For each example in the input, `easynlp.ner` returns: a list of tags, a list of start offsets to the beginning of those tags, and a list of end offsets to the end of those tags. The `output_column` defaults to `"ner"` tags and the output keys are given by `f"{output_column}_tags"`, `f"{output_column}_start_offsets"`, and `f"{output_column}_end_offsets"`, for the tags, start offsets and end offsets, respectively.
+`easynlp.ner` recognizes the following NER tags: `PER` (person), `ORG` (organization), `LOC` (location), and `MIS` (miscellaneous). For each example in the input, `easynlp.ner` returns: a list of tags, a list of start offsets to the beginning of those tagged entities, and a list of end offsets to the end of those tagged entities. The `output_column` defaults to `"ner"` and the output keys are given by `f"{output_column}_tags"`, `f"{output_column}_start_offsets"`, and `f"{output_column}_end_offsets"`, for the tags, start offsets and end offsets, respectively.
 
 ```python
 import easynlp
