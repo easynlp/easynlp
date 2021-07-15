@@ -12,7 +12,7 @@
 
 `easynlp` only supports inference, and does not support training or fine-tuning a model. However, it can use any task-appropriate model provided by the `transformers` library, see the list of all models [here](https://huggingface.co/models).
 
-**Note**: the first time each `easynlp` function is called it will need to download the appropriate pre-trained model. These average around ~300MB each.
+**Note**: the first time each `easynlp` function is called it will need to download the appropriate pre-trained model. These can be anywhere from ~250MB to ~2GB, depending on the model used.
 
 ## Installation
 
