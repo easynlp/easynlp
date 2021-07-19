@@ -5,8 +5,9 @@
 `easynlp` is a library for performing natural language processing (NLP) with minimal friction -- import the library and call the task-specific function and you're done! `easynlp` currently supports the following tasks:
 
 - text classification
-- named entity recogition
 - translation
+- named entity recogition
+- summarization
 
 `easynlp` is essentially is a wrapper around the [transformers](https://github.com/huggingface/transformers) library making heavy use of their [pipelines](https://huggingface.co/transformers/main_classes/pipelines.html).
 
@@ -17,7 +18,7 @@
 ## Installation
 
 ```bash
-pip install git+https://github.com/dpinney/eznlp
+pip install git+https://github.com/easynlp/easynlp
 ```
 
 Alternatively, if you wish to edit `easynlp`:
@@ -127,6 +128,37 @@ assert output_dataset["ner_start_offsets"] == ner_tags_starts
 assert output_dataset["ner_end_offsets"] == ner_tags_ends
 ```
 
+### Summarization
+
+`easynlp.summarization` performs automatic summarization on given text. Summarization models are usually relatively large, and quite slow. The default `output_column` is `"summarization"`.
+
+```python
+import easynlp
+
+data = {
+        "text": [
+            """The warning begins at 22:00 GMT on Saturday and
+               ends at 10:00 on Sunday. The ice could lead to
+               difficult driving conditions on untreated roads
+               and slippery conditions on pavements, the weather
+               service warned. Only the southernmost counties and
+               parts of the most westerly counties are expected
+               to escape. Counties expected to be affected are
+               Carmarthenshire, Powys, Ceredigion, Pembrokeshire,
+               Denbighshire, Gwynedd, Wrexham, Conwy, Flintshire,
+               Anglesey, Monmouthshire, Blaenau Gwent,
+               Caerphilly, Merthyr Tydfil, Neath Port Talbot,
+               Rhondda Cynon Taff and Torfaen.""",
+                ]
+        }
+
+output_dataset = easynlp.summarization(data)
+
+summarized_text = ['The Met Office has issued a yellow "be aware" warning for ice across much of Wales.']
+
+assert output_dataset[output_column] == summarized_text
+```
+
 ## Server
 
 We can also use `easynlp` as a server using the `easynlpserver` command.
@@ -169,6 +201,13 @@ assert r.status_code == 200
 assert r.json() == {"ner_tags": [["PER"], ["LOC"], ["ORG"]],
                     "ner_tags_starts": [[11], [10], [11]],
                     "ner_tags_ends": [[14], [18], [20]]}
+
+r = requests.post("http://localhost:1234/summarization", json={"text": ["""Arsenal beat Chelsea 2-0 in
+                                                                           the FA Cup Final last night."""]
+                                                              })
+
+assert r.status_code == 200
+assert r.json() == {'summarization': ["Watch highlights of Arsenal's victory over Chelsea in the FA Cup Final."]}
 ```
 
 An example of how to use the server with `curl` using `easynlpserver` on port `8888`:
@@ -207,4 +246,16 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{"text": ["My name is Ben.", "I live in Scotland.", "I work for Microsoft."]}'
+```
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8888/summarization' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "text": [
+    "Arsenal beat Chelsea 2-0 in the FA Cup Final last night."
+  ]
+}'
 ```
