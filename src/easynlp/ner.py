@@ -61,10 +61,10 @@ def get_ner_tags(
     input_column: str,
     output_column: str,
 ) -> Dict[str, List[str]]:
+    """Performs NER on a batch of examples."""
     outputs = pipe(
         examples[input_column],
     )
-    """Performs NER on a batch of examples."""
     if isinstance(outputs[0], dict):  # handle case where input is a single example
         outputs = [outputs]
     predicted_tags = [[o["entity_group"] for o in output] for output in outputs]
