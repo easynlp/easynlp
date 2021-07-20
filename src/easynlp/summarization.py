@@ -5,17 +5,17 @@ import pandas as pd
 import datasets
 
 
-def ner(
-    data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
+def summarization(
+    data: Union[List[Dict[str, str]], Dict[str, List], pd.DataFrame, datasets.Dataset],
     input_column: str = "text",
-    output_column: str = "ner",
+    output_column: str = "summarization",
     model_name: Optional[str] = None,
-) -> datasets.Dataset:
-    """Performs zero-shot classification on given data."""
+):
+    """Does summarization on data."""
 
     # get default model name
     if model_name is None:
-        model_name = "dslim/bert-base-NER"
+        model_name = f"google/pegasus-xsum"
 
     # check input and output columns are different
     assert (
@@ -30,19 +30,18 @@ def ner(
     dataset = dataset.remove_columns(columns_to_remove)
 
     # load model and tokenizer
-    model = transformers.AutoModelForTokenClassification.from_pretrained(model_name)
+    model = transformers.AutoModelForSeq2SeqLM.from_pretrained(model_name)
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
 
     # create pipeline
-    pipe = transformers.TokenClassificationPipeline(
+    pipe = transformers.SummarizationPipeline(
         model=model,
         tokenizer=tokenizer,
-        aggregation_strategy="simple",
     )
 
-    # perform NER
+    # perform summarization
     dataset = dataset.map(
-        get_ner_tags,
+        get_summarization,
         fn_kwargs={
             "pipe": pipe,
             "input_column": input_column,
@@ -55,23 +54,16 @@ def ner(
     return dataset
 
 
-def get_ner_tags(
+def get_summarization(
     examples: List[Dict[str, List[str]]],
     pipe: transformers.Pipeline,
     input_column: str,
     output_column: str,
 ) -> Dict[str, List[str]]:
-    """Performs NER on a batch of examples."""
+    """Performs translation on a batch of examples."""
     outputs = pipe(
         examples[input_column],
+        clean_up_tokenization_spaces=True,
     )
-    if isinstance(outputs[0], dict):  # handle case where input is a single example
-        outputs = [outputs]
-    predicted_tags = [[o["entity_group"] for o in output] for output in outputs]
-    predicted_start_offsets = [[o["start"] for o in output] for output in outputs]
-    predicted_end_offsets = [[o["end"] for o in output] for output in outputs]
-    return {
-        f"{output_column}_tags": predicted_tags,
-        f"{output_column}_start_offsets": predicted_start_offsets,
-        f"{output_column}_end_offsets": predicted_end_offsets,
-    }
+    predicted_summarizations = [output["summary_text"] for output in outputs]
+    return {output_column: predicted_summarizations}

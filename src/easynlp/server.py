@@ -38,6 +38,15 @@ class NERResponse(pydantic.BaseModel):
     ner_end_offsets: List[List[int]]
 
 
+class SummarizationRequest(pydantic.BaseModel):
+    text: List[str]
+    model_name: Optional[str] = None
+
+
+class SummarizationResponse(pydantic.BaseModel):
+    summarization: List[str]
+
+
 @app.get("/")
 def root():
     return {"message": "hello world!"}
@@ -89,4 +98,14 @@ def ner(request: NERRequest):
         ner_start_offsets=predicted_start_offsets,
         ner_end_offsets=predicted_end_offsets,
     )
+    return response
+
+
+@app.post("/summarization", response_model=SummarizationResponse)
+def summarization(request: SummarizationRequest):
+    data = {"text": request.text}
+    model_name = request.model_name
+    outputs = easynlp.summarization(data=data, model_name=model_name)
+    predicted_summaries = [output["summarization"] for output in outputs]
+    response = SummarizationResponse(summarization=predicted_summaries)
     return response
