@@ -11,7 +11,7 @@ def ner(
     output_column: str = "ner",
     model_name: Optional[str] = None,
 ) -> datasets.Dataset:
-    """Performs zero-shot classification on given data."""
+    """Performs NER on given data."""
 
     # get default model name
     if model_name is None:

@@ -47,6 +47,16 @@ class SummarizationResponse(pydantic.BaseModel):
     summarization: List[str]
 
 
+class QuestionAnsweringRequest(pydantic.BaseModel):
+    text: List[str]
+    context: List[str]
+    model_name: Optional[str] = None
+
+
+class QuestionAnsweringResponse(pydantic.BaseModel):
+    answer: List[str]
+
+
 @app.get("/")
 def root():
     return {"message": "hello world!"}
@@ -108,4 +118,14 @@ def summarization(request: SummarizationRequest):
     outputs = easynlp.summarization(data=data, model_name=model_name)
     predicted_summaries = [output["summarization"] for output in outputs]
     response = SummarizationResponse(summarization=predicted_summaries)
+    return response
+
+
+@app.post("/question_answering", response_model=QuestionAnsweringResponse)
+def question_answering(request: QuestionAnsweringRequest):
+    data = {"text": request.text, "context": request.context}
+    model_name = request.model_name
+    outputs = easynlp.question_answering(data=data, model_name=model_name)
+    predicted_answers = [output["answer"] for output in outputs]
+    response = QuestionAnsweringResponse(answer=predicted_answers)
     return response

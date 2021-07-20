@@ -24,6 +24,11 @@ def translation(
         input_column != output_column
     ), f"input and output columns must be different, both are {input_column}"
 
+    # check languages are different
+    assert (
+        input_language != output_language
+    ), f"input and output languages must be different, both are {input_language}"
+
     # ensure input language is a string
     assert isinstance(
         input_language, str

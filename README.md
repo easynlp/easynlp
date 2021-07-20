@@ -71,7 +71,9 @@ labels = ["sport", "weather", "business"]
 
 output_dataset = easynlp.classification(data, labels)
 
-assert output_dataset["classification"] == ["business", "weather", "sports"]
+actual_labels = ["business", "weather", "sports"]
+
+assert output_dataset["classification"] == actual_labels
 ```
 
 ### Translation
@@ -117,7 +119,7 @@ data = {
             ]
         }
 
-output_dataset = easynlp.ner(data, input_column, output_column)
+output_dataset = easynlp.ner(data)
 
 ner_tags = [["PER", "LOC", "ORG"], ["PER"], ["LOC"], ["ORG"]]
 ner_tags_starts = [[11, 26, 48], [11], [10], [11]]
@@ -159,6 +161,31 @@ summarized_text = ['The Met Office has issued a yellow "be aware" warning for ic
 assert output_dataset[output_column] == summarized_text
 ```
 
+### Question Answering
+
+`easynlp.question_answering` performs extractive question answering given a question and a context. It can only answer questions where the answer appears within the given context. The default input and context columns are `"text"` and `"context"`, respectively. The default output column is `"answer"`.
+
+```python
+import easynlp
+
+data = {
+        "text": [
+            "What is extractive question answering?",
+                ],
+        "context": [
+            """Extractive Question Answering is the task of extracting an answer from a text given a question.
+               An example of a question answering dataset is the SQuAD dataset, which is entirely based on that task.
+               If you would like to fine-tune a model on a SQuAD task, you may leverage the examples/pytorch/question-answering/run_squad.py script.""",
+                   ],
+       }
+
+output_dataset = easynlp.question_answering(data)
+
+answers = ["the task of extracting an answer from a text given a question"]
+
+assert output_dataset["answers"] == answers
+```
+
 ## Server
 
 We can also use `easynlp` as a server using the `easynlpserver` command.
@@ -182,7 +209,7 @@ r = requests.post("http://localhost:1234/classification", json={"text": ["I love
                                                                 "labels": ["sports", 
                                                                            "weather",
                                                                            "business"]
-                                                                })
+                                                               })
 assert r.status_code == 200
 assert r.json() == {"classification": ["sports"]}
 
@@ -208,6 +235,13 @@ r = requests.post("http://localhost:1234/summarization", json={"text": ["""Arsen
 
 assert r.status_code == 200
 assert r.json() == {'summarization': ["Watch highlights of Arsenal's victory over Chelsea in the FA Cup Final."]}
+
+
+r = requests.post("http://localhost:1234/question_answering", json={"text": ["What is John's favourite number?"],
+                                                                    "context": ["""John's favourite color is red,
+                                                                                   and his favourite number is seven."""]
+                                                                   })
+
 ```
 
 An example of how to use the server with `curl` using `easynlpserver` on port `8888`:
@@ -256,6 +290,21 @@ curl -X 'POST' \
   -d '{
   "text": [
     "Arsenal beat Chelsea 2-0 in the FA Cup Final last night."
+  ]
+}'
+```
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8888/question_answering' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "text": [
+    "What is John'\''s favourite number?"
+  ],
+  "context": [
+    "John'\''s favourite color is red, and his favourite number is seven."
   ]
 }'
 ```
