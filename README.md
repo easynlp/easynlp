@@ -8,6 +8,7 @@
 - translation
 - named entity recogition
 - summarization
+- question answering
 
 `easynlp` is essentially is a wrapper around the [transformers](https://github.com/huggingface/transformers) library making heavy use of their [pipelines](https://huggingface.co/transformers/main_classes/pipelines.html).
 
@@ -242,6 +243,8 @@ r = requests.post("http://localhost:1234/question_answering", json={"text": ["Wh
                                                                                    and his favourite number is seven."""]
                                                                    })
 
+assert r.status_code == 200
+assert r.json() == {"answer": ["seven"]}
 ```
 
 An example of how to use the server with `curl` using `easynlpserver` on port `8888`:
