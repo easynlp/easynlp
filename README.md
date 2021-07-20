@@ -167,7 +167,7 @@ We can also use `easynlp` as a server using the `easynlpserver` command.
 easynlpserver --port 1234
 ```
 
-The `port` is optional and defaults to `8888`. This starts an `uvicorn` server at `http://127.0.0.1:<port>`. We can now send a `POST` request to `http://127.0.0.1:<port>/<task>` to run the desired `easynlp` function on the given data.
+The `port` is optional and defaults to `8888`. This starts an `uvicorn` server at `http://127.0.0.1:<port>` (which is the same thing as `http://localhost:<port>`). We can now send a `POST` request to `http://127.0.0.1:<port>/<task>` (or `http://localhost:<port>/<task>`) to run the desired `easynlp` function on the given data.
 
 The data must be a `JSON` object which is formatted in the same way as the dictionary of lists format used for `easynlp` as a Python module.
 
