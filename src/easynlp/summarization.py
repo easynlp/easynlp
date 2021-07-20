@@ -11,7 +11,7 @@ def summarization(
     output_column: str = "summarization",
     model_name: Optional[str] = None,
 ):
-    """Does summarization on data."""
+    """Performs summarization on given data."""
 
     # get default model name
     if model_name is None:
@@ -60,7 +60,7 @@ def get_summarization(
     input_column: str,
     output_column: str,
 ) -> Dict[str, List[str]]:
-    """Performs translation on a batch of examples."""
+    """Performs summarization on a batch of examples."""
     outputs = pipe(
         examples[input_column],
         clean_up_tokenization_spaces=True,
