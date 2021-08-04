@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    scripts=["scripts/easynlpserver"],
+    scripts=["scripts/easynlp"],
     python_requires=">=3.7",
     install_requires=[
         "datasets>=1.9.0",

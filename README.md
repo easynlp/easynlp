@@ -189,10 +189,10 @@ assert output_dataset["answers"] == answers
 
 ## Server
 
-We can also use `easynlp` as a server using the `easynlpserver` command.
+We can also use `easynlp` as a server using the `easynlp` command line interface.
 
 ```bash
-easynlpserver --port 1234
+easynlp --port 1234
 ```
 
 The `port` is optional and defaults to `8888`. This starts an `uvicorn` server at `http://127.0.0.1:<port>` (which is the same thing as `http://localhost:<port>`). We can now send a `POST` request to `http://127.0.0.1:<port>/<task>` (or `http://localhost:<port>/<task>`) to run the desired `easynlp` function on the given data.
@@ -247,7 +247,7 @@ assert r.status_code == 200
 assert r.json() == {"answer": ["seven"]}
 ```
 
-An example of how to use the server with `curl` using `easynlpserver` on port `8888`:
+An example of how to use the server with `curl` using `easynlp` command line interface on port `8888`:
 
 ```bash
 curl -X 'POST' \
