@@ -6,7 +6,7 @@ import datasets
 
 
 def ner(
-    data: Union[list[dict[str, str]], dict[str, list], pd.DataFrame, datasets.Dataset],
+    data: Union[List[Dict[str, str]], Dict[str, list], pd.DataFrame, datasets.Dataset],
     input_column: str = "text",
     output_column: str = "ner",
     model_name: Optional[str] = None,
