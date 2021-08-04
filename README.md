@@ -247,7 +247,7 @@ assert r.status_code == 200
 assert r.json() == {"answer": ["seven"]}
 ```
 
-An example of how to use the server with `curl` using `easynlp` command line interface on port `8888`:
+An example of how to use the server with `curl` using the `easynlp` command line interface on port `8888`:
 
 ```bash
 curl -X 'POST' \
